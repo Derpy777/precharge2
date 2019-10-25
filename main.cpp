@@ -230,7 +230,18 @@ void travail(std::string racine)
 	std::cout << "Mappage en mémoire des fichiers du jeu..." << '\n' ;
   for(int i=0; i<listeDeFichiers.size(); ++i)
 	{
-		listeDeMaps.push_back(new mio::shared_mmap_sink(listeDeFichiers[i]));
+		
+    nbMbLus = nbMbLus + filesize(listeDeFichiers[i]);
+
+    if(nbMbLus < memoireLibre)
+    {
+      listeDeMaps.push_back(new mio::shared_mmap_sink(listeDeFichiers[i]));
+    }
+    else
+    {
+      std::cout << "La RAM est pleine, la mise en mémoire a donc été arrêté..." << '\n';
+      break;
+    }
 	}
 
   std::cout << "Le jeu a correctement été mis en mémoire..." << '\n' ;
