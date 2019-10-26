@@ -59,7 +59,7 @@ class Credits
 
 	std::string _bonjour = "-------------------------------------------\n\
 Programme réalisé et codé en C++ par Derpy\n\
--------------------------------------------";
+-------------------------------------------\n";
 
 	std::string _inRam = "Les données ont été correctement mises dans la RAM, vous pouvez lancer le jeu...\n\
 Quand vous aurez fini de jouer, pressez une touche, les données seront alors retirées de la RAM...";
@@ -197,6 +197,17 @@ unsigned long long getFreeSystemMemory()
 
 
 
+char* stringToChar(std::string S)
+{
+	char *cstr = new char[S.size() + 1];
+	S.copy(cstr, S.size() + 1);
+	cstr[S.size()] = '\0';
+
+	return cstr;
+}
+
+
+
 std::ifstream::pos_type filesize(const char* filename)
 {
     std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
@@ -231,7 +242,7 @@ void travail(std::string racine)
   for(int i=0; i<listeDeFichiers.size(); ++i)
 	{
 		
-    nbMbLus = nbMbLus + filesize(listeDeFichiers[i]);
+    nbMbLus = nbMbLus + filesize(stringToChar(listeDeFichiers[i]));
 
     if(nbMbLus < memoireLibre)
     {
