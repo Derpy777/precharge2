@@ -8,7 +8,7 @@
 #include <string>
 #include <experimental/filesystem>
 #include <sys/stat.h>
-//#include <windows.h>
+#include <windows.h>
 #include <fstream>
 
 
@@ -54,18 +54,18 @@ class Credits
 +++++++++++++++++++++@@@@:.........-####@@@+++++++++++++";
 
 
-	std::string _secret = "Petite dÃ©dicasse Ã  la GDC, vive la Master-Race XD\n";
+	std::string _secret = "Petite d‚dicasse … la GDC, vive la Master-Race XD\n";
 
 
 	std::string _bonjour = "-------------------------------------------\n\
-Programme rÃ©alisÃ© et codÃ© en C++ par Derpy\n\
+Programme r‚alis‚ et cod‚ en C++ par Derpy\n\
 -------------------------------------------\n";
 
-	std::string _inRam = "Les donnÃ©es ont Ã©tÃ© correctement mises dans la RAM, vous pouvez lancer le jeu...\n\
-Quand vous aurez fini de jouer, pressez une touche, les donnÃ©es seront alors retirÃ©es de la RAM...";
+	std::string _inRam = "Les donn‚es ont ‚t‚ correctement mises dans la RAM, vous pouvez lancer le jeu...\n\
+Quand vous aurez fini de jouer, pressez une touche, les donn‚es seront alors retir‚es de la RAM...";
 
 
-	std::string _fini = "Les donnÃ©es ont Ã©tÃ© correctement enlevÃ©es de la RAM...";
+	std::string _fini = "Les donn‚es ont ‚t‚ correctement enlev‚es de la RAM...";
 
 	std::string _usage = "\nUSAGE\n";
 
@@ -186,14 +186,14 @@ return listOfFiles;
 
 
 
-/*
+
 unsigned long long getFreeSystemMemory()
 {
     MEMORYSTATUSEX status;
     status.dwLength = sizeof(status);
     GlobalMemoryStatusEx(&status);
     return status.ullAvailPhys/(1024*1024);
-}*/
+}
 
 
 
@@ -226,43 +226,52 @@ constexpr unsigned int str2int(const char* str, int h = 0)
 void travail(std::string racine)
 {
 	std::vector<std::string> listeDeFichiers;
-  std::vector<mio::shared_mmap_sink*> listeDeMaps;
-  unsigned long memoireLibre = 0;
-  unsigned long nbMbLus = 0;
+  	std::vector<mio::shared_mmap_source*> listeDeMaps;
+  	ifstream infile;
+  	unsigned long memoireLibre = 0;
+  	unsigned long nbMbLus = 0;
 
 
-  //memoireLibre = getFreeSystemMemory();
+  	memoireLibre = getFreeSystemMemory();
 
 
-	std::cout << "DÃ©couverte de la liste des fichiers du jeu..." << '\n' ;
-  listeDeFichiers = getAllFilesInDir(racine);
+	std::cout << "D‚couverte de la liste des fichiers du jeu..." << '\n' ;
+  	listeDeFichiers = getAllFilesInDir(racine);
 
 
-	std::cout << "Mappage en mÃ©moire des fichiers du jeu..." << '\n' ;
-  for(int i=0; i<listeDeFichiers.size(); ++i)
+	std::cout << "Mappage en m‚moire des fichiers du jeu..." << '\n' ;
+  	for(int i=0; i<listeDeFichiers.size(); ++i)
 	{
 		
-    nbMbLus = nbMbLus + filesize(stringToChar(listeDeFichiers[i]));
+    nbMbLus = nbMbLus + (filesize(stringToChar(listeDeFichiers[i]))/(1024*1024));
 
     if(nbMbLus < memoireLibre)
     {
-      listeDeMaps.push_back(new mio::shared_mmap_sink(listeDeFichiers[i]));
+      listeDeMaps.push_back(new mio::shared_mmap_source(listeDeFichiers[i]));
+      char * buffer = new char [1024*1024];
+      infile.open(listeDeFichiers[i],ios::binary|ios::in);
+      while(infile.read(buffer,sizeof(buffer)))
+  	  {
+  		  ;
+  	  }
+
+  	  infile.close();
+  	  delete[] buffer;
     }
     else
     {
-      std::cout << "La RAM est pleine, la mise en mÃ©moire a donc Ã©tÃ© arrÃªtÃ©..." << '\n';
+      std::cout << "La RAM est pleine, la mise en m‚moire a donc ‚t‚ arrˆt‚..." << '\n';
       break;
     }
 	}
 
-  std::cout << "Le jeu a correctement Ã©tÃ© mis en mÃ©moire..." << '\n' ;
+  std::cout << "Le jeu a correctement ‚t‚ mis en m‚moire..." << '\n' ;
   std::cout << "Vous pouvez lancer le jeu maintenant" << '\n' ;
-  std::cout << "Lorsque vous aurez fini de jouer, appuyez sur une touche, le processus de libÃ©ration de la mÃ©moire commencera..." << '\n' ;
+  std::cout << "Lorsque vous aurez fini de jouer, appuyez sur une touche, le processus de lib‚ration de la m‚moire commencera..." << '\n' ;
   
-  //system("pause");
-  system("read a");
+  system("pause");
 
-  std::cout << "libÃ©ration de la mÃ©moire..." << '\n' ;
+  std::cout << "lib‚ration de la m‚moire..." << '\n' ;
 
   for(int i=0; i<listeDeMaps.size(); ++i)
   {
@@ -270,7 +279,7 @@ void travail(std::string racine)
     delete listeDeMaps[i];
   }
 
-  std::cout << "Le jeu a correctement Ã©tÃ© retirÃ© de la mÃ©moire..." << '\n' ;
+  std::cout << "Le jeu a correctement ‚t‚ retir‚ de la m‚moire..." << '\n' ;
 
 }
 
@@ -287,7 +296,7 @@ int main(int argc, char** argv)
 
     if((argc<2) or (argc>3))
     {
-    	std::cout << "Nombre de paramÃ¨tres incorrect !" << '\n';
+    	std::cout << "Nombre de paramŠtres incorrect !" << '\n';
     	std::cout << credits.getUsage() ;
     	return 1;
     }
@@ -305,13 +314,13 @@ int main(int argc, char** argv)
   				}
   				else
   				{
-  					std::cout << "Le rÃ©pertoire n'existe pas !" << '\n';
+  					std::cout << "Le r‚pertoire n'existe pas !" << '\n';
   				}
 
   			}
   			else
   			{
-  				std::cout << "Nombre de paramÃ¨tres incorrect !" << '\n';
+  				std::cout << "Nombre de paramŠtres incorrect !" << '\n';
     			std::cout << credits.getUsage() ;
     			return 1;
   			}
