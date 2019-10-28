@@ -248,15 +248,20 @@ void travail(std::string racine)
     if(nbMbLus < memoireLibre)
     {
       listeDeMaps.push_back(new mio::shared_mmap_source(listeDeFichiers[i]));
-      char * buffer = new char [1024*1024];
-      infile.open(listeDeFichiers[i],ios::binary|ios::in);
-      while(infile.read(buffer,sizeof(buffer)))
-  	  {
-  		  ;
-  	  }
+      
+      
+      const char * monpointer = listeDeMaps[listeDeMaps.size()-1]->data();
+      char * buffer = new char[1];
 
-  	  infile.close();
-  	  delete[] buffer;
+      for(int j=0; j < listeDeMaps[listeDeMaps.size()-1]->size(); j=j+4000 )
+      {
+        std::memcpy(buffer,monpointer,1);
+        monpointer=monpointer+4000;
+      }
+
+
+      delete[] buffer;
+
     }
     else
     {
