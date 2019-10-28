@@ -67,9 +67,14 @@ Quand vous aurez fini de jouer, pressez une touche, les donn‚es seront alors ret
 
 	std::string _fini = "Les donn‚es ont ‚t‚ correctement enlev‚es de la RAM...";
 
-	std::string _usage = "\nUSAGE\n";
+	std::string _usage = "\n\
+  USAGE :\n\n\
+  precharge2.exe -r <chemin du dossier du jeu> : Met un jeu en m‚moire.\n\
+  precharge2.exe -v : Affiche le num‚ro de version du programme.\n";
 
-	std::string _version = "1.0.0";
+  
+
+	std::string _version = "1.1.0";
 
 
 public:
