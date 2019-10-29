@@ -1,6 +1,5 @@
 #include "shared_mmap.hpp"
 #include <system_error> // for std::error_code
-#include <cstdio> // for std::printf
 #include <cassert>
 #include <vector>
 #include <algorithm>
@@ -10,7 +9,7 @@
 #include <sys/stat.h>
 #include <windows.h>
 #include <fstream>
-
+#include "ConsoleColor.h"
 
 
 
@@ -61,11 +60,6 @@ class Credits
 Programme r‚alis‚ et cod‚ en C++ par Derpy\n\
 -------------------------------------------\n";
 
-	std::string _inRam = "Les donn‚es ont ‚t‚ correctement mises dans la RAM, vous pouvez lancer le jeu...\n\
-Quand vous aurez fini de jouer, pressez une touche, les donn‚es seront alors retir‚es de la RAM...";
-
-
-	std::string _fini = "Les donn‚es ont ‚t‚ correctement enlev‚es de la RAM...";
 
 	std::string _usage = "\n\
   USAGE :\n\n\
@@ -74,7 +68,7 @@ Quand vous aurez fini de jouer, pressez une touche, les donn‚es seront alors ret
 
   
 
-	std::string _version = "1.1.0";
+	std::string _version = "1.1.1";
 
 
 public:
@@ -82,16 +76,6 @@ public:
 	std::string getBonjour()
 	{
 		return _bonjour;
-	}
-
-	std::string getInRam()
-	{
-		return _inRam;
-	}
-
-	std::string getFini()
-	{
-		return _fini;
 	}
 
 	std::string getUsage()
@@ -270,14 +254,14 @@ void travail(std::string racine)
     }
     else
     {
-      std::cout << "La RAM est pleine, la mise en m‚moire a donc ‚t‚ arrˆt‚..." << '\n';
+      std::cout << yellow << "La RAM est pleine, la mise en m‚moire a donc ‚t‚ arrˆt‚..." << '\n';
       break;
     }
 	}
 
-  std::cout << "Le jeu a correctement ‚t‚ mis en m‚moire..." << '\n' ;
-  std::cout << "Vous pouvez lancer le jeu maintenant" << '\n' ;
-  std::cout << "Lorsque vous aurez fini de jouer, appuyez sur une touche, le processus de lib‚ration de la m‚moire commencera..." << '\n' ;
+  std::cout << white << "Le jeu a correctement ‚t‚ mis en m‚moire..." << "\n\n" ;
+  std::cout << blue << "Vous pouvez lancer le jeu maintenant" << "\n\n" ;
+  std::cout << white << "Lorsque vous aurez fini de jouer, appuyez sur une touche, le processus de lib‚ration de la m‚moire commencera..." << '\n' ;
   
   system("pause");
 
@@ -301,7 +285,7 @@ int main(int argc, char** argv)
 	Credits credits;
 
 
-    std::cout << credits.getBonjour() << '\n';
+    std::cout << purple << credits.getBonjour() << white << '\n';
 
 
     if((argc<2) or (argc>3))
@@ -345,7 +329,7 @@ int main(int argc, char** argv)
   			std::cout << "RAM libre : ????? Mb" << '\n';
     		break;
     	case str2int("--secret"):
-  			std::cout << credits.getPoney() << "\n\n\n" << credits.getSecret() << '\n';
+  			std::cout << yellow << credits.getPoney() << "\n\n\n" << credits.getSecret() << '\n';
     		break;
     	default:
     		std::cout << credits.getUsage();
